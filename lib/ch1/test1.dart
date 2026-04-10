@@ -11,8 +11,27 @@ void main() {
 }
 
 // 화면을 구성하기 위한 개발자 클래스.. (통칭해서 위젯이라 부른다.)
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late String wordPair;
+
+  @override
+  void initState() {
+    super.initState();
+    wordPair = WordPair.random().asPascalCase;
+  }
+
+  void _refreshWord() {
+    setState(() {
+      wordPair = WordPair.random().asPascalCase;
+    });
+  }
 
   // 화면을 구성하기 위해서 자동 호출된다.
   // 이 함수에서 리턴시키는 것이 화면에 출력된다.
@@ -29,13 +48,16 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.lightBlue,
         ),
         body: Center(
-          child: Text(
-            WordPair.random().asPascalCase,
-            style: const TextStyle(
-              fontSize: 90,
-              fontWeight: FontWeight.bold,
-              color: Colors.lightBlue,
-            ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(wordPair, style: const TextStyle(fontSize: 40.0)),
+              const SizedBox(height: 20.0),
+              ElevatedButton(
+                onPressed: _refreshWord,
+                child: const Text('새로운 단어 생성'),
+              ),
+            ],
           ),
         ),
       ),
