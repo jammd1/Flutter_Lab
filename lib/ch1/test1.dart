@@ -30,7 +30,6 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     randomIndex = Random().nextInt(nouns.length);
-    debugPrint("단어장 크기: ${nouns.length}");
     wordPair = nouns[randomIndex];
     _translateWord(wordPair);
   }
