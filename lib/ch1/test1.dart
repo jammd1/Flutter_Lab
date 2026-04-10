@@ -6,6 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
 import 'package:translator/translator.dart';
+import 'dart:math';
 
 void main() {
   runApp(const MyApp()); // 화면 출력하라.. 매개변수의 객체를
@@ -23,11 +24,13 @@ class _MyAppState extends State<MyApp> {
   final translator = GoogleTranslator();
   late String wordPair;
   String korMeaning = '번역 중..';
+  late int randomIndex;
 
   @override
   void initState() {
     super.initState();
-    wordPair = nouns.take(1).first;
+    randomIndex = Random().nextInt(nouns.length);
+    wordPair = nouns[randomIndex];
     _translateWord(wordPair);
   }
 
@@ -49,7 +52,8 @@ class _MyAppState extends State<MyApp> {
 
   void _refreshWord() {
     setState(() {
-      wordPair = WordPair.random().asPascalCase;
+      randomIndex = Random().nextInt(nouns.length);
+      wordPair = nouns[randomIndex];
     });
     _translateWord(wordPair);
   }
