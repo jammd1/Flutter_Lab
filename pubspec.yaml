@@ -37,6 +37,7 @@ dependencies:
   go_router: ^17.2.0
   dio: ^5.9.2
   english_words: ^4.0.0
+  translator: ^1.0.4+1
 
 dev_dependencies:
   flutter_test:

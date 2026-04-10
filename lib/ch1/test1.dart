@@ -5,6 +5,7 @@
 // material.dart: UI가 출력되는 앱을 개발하기 위한 기본
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
+import 'package:translator/translator.dart';
 
 void main() {
   runApp(const MyApp()); // 화면 출력하라.. 매개변수의 객체를
@@ -19,18 +20,38 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final translator = GoogleTranslator();
   late String wordPair;
+  String korMeaning = '번역 중..';
 
   @override
   void initState() {
     super.initState();
-    wordPair = WordPair.random().asPascalCase;
+    wordPair = nouns.take(1).first;
+    _translateWord(wordPair);
+  }
+
+  Future<void> _translateWord(String text) async {
+    setState(() {
+      korMeaning = '번역 중..';
+    });
+    try {
+      var translation = await translator.translate(text, from: 'en', to: 'ko');
+      setState(() {
+        korMeaning = translation.text;
+      });
+    } catch (e) {
+      setState(() {
+        korMeaning = '번역 실패: $e';
+      });
+    }
   }
 
   void _refreshWord() {
     setState(() {
       wordPair = WordPair.random().asPascalCase;
     });
+    _translateWord(wordPair);
   }
 
   // 화면을 구성하기 위해서 자동 호출된다.
@@ -52,7 +73,9 @@ class _MyAppState extends State<MyApp> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(wordPair, style: const TextStyle(fontSize: 40.0)),
-              const SizedBox(height: 20.0),
+              const SizedBox(height: 10.0),
+              Text(korMeaning, style: const TextStyle(fontSize: 30.0)),
+              const SizedBox(height: 15.0),
               ElevatedButton(
                 onPressed: _refreshWord,
                 child: const Text('새로운 단어 생성'),
